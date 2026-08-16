@@ -28,6 +28,14 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## UI testing
+
+After every code update:
+
+1. Review `test/ui-test-plan.md` and update it whenever the intended console inputs, outputs, or behaviour have changed.
+2. Invoke the project-local `test-ui` skill by following `skills/test-ui/SKILL.md` and running `python skills/test-ui/scripts/run_ui_tests.py`.
+3. Do not continue after a UI-test failure. Report the failing test case together with its expected and actual output.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
