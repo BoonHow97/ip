@@ -68,6 +68,12 @@ public class Nelson {
                 continue;
             }
 
+            if (command.startsWith("unmark ")) {
+                unmarkTask(command);
+                System.out.println("    ____________________________________________________________");
+                continue;
+            }
+
             if (command.startsWith("mark ")) {
                 markTask(command);
                 System.out.println("    ____________________________________________________________");
@@ -108,5 +114,19 @@ public class Nelson {
         isDone[taskIndex] = true;
         System.out.println("    You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
         System.out.println("    [X] " + tasks[taskIndex]);
+    }
+
+    /**
+     * Marks the task specified in an unmark command as incomplete.
+     *
+     * @param command the complete command entered by the user
+     */
+    public void unmarkTask(String command) {
+        int taskNumber = Integer.parseInt(command.substring(7));
+        int taskIndex = taskNumber - 1;
+        isDone[taskIndex] = false;
+        System.out.println("    A blunder. Taking back your move? Pathetic. "
+                + "I have marked this as not done yet:");
+        System.out.println("    [ ] " + tasks[taskIndex]);
     }
 }
