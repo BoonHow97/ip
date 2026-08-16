@@ -1,13 +1,12 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Starts the Nelson chatbot application.
  */
 public class Nelson {
-    /** Stores the user's tasks for this run of the program. */
-    private final Task[] tasks = new Task[100];
-    /** Number of tasks currently stored in {@link #tasks}. */
-    private int taskCount = 0;
+    /** Stores the user's tasks for this run of the program using an ArrayList. */
+    private final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         Nelson nelson = new Nelson();
@@ -45,7 +44,7 @@ public class Nelson {
 
             try {
                 if (command.equals("bye") || command.equals("Bye")) {
-                    System.out.println("    Resigning already? Pathetic. I win, Molo!");
+                    System.out.println("    Molo! Resigning already? Pathetic. I win.");
                     System.out.println("    ____________________________________________________________");
                     return;
                 }
@@ -141,9 +140,9 @@ public class Nelson {
      * Displays all tasks that have been added during this run.
      */
     public void showTasks() {
-        System.out.println("    Molo! Evaluate your board state:");
-        for (int index = 0; index < taskCount; index++) {
-            Task task = tasks[index];
+        System.out.println("    Molo! Evaluate your board state. Here are the tasks in your list:");
+        for (int index = 0; index < tasks.size(); index++) {
+            Task task = tasks.get(index);
             System.out.println("    " + (index + 1) + "." + task);
         }
     }
@@ -161,10 +160,10 @@ public class Nelson {
         }
         int taskNumber = Integer.parseInt(indexStr);
         int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex >= taskCount) {
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
-        Task task = tasks[taskIndex];
+        Task task = tasks.get(taskIndex);
         task.markAsDone();
         System.out.println("    Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
         System.out.println("    [X] " + task.getDescription());
@@ -183,17 +182,17 @@ public class Nelson {
         }
         int taskNumber = Integer.parseInt(indexStr);
         int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex >= taskCount) {
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
-        Task task = tasks[taskIndex];
+        Task task = tasks.get(taskIndex);
         task.markAsNotDone();
         System.out.println("    Molo! Taking back your move? Absolute blunder. Marked as not done yet:");
         System.out.println("    [ ] " + task.getDescription());
     }
 
     /**
-     * Deletes the task specified by the user.
+     * Deletes the task specified by the user using ArrayList collection methods.
      *
      * @param command the complete delete command
      * @throws NelsonException if index is invalid or out of bounds
@@ -205,18 +204,13 @@ public class Nelson {
         }
         int taskNumber = Integer.parseInt(indexStr);
         int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex >= taskCount) {
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
-        Task removedTask = tasks[taskIndex];
-        for (int i = taskIndex; i < taskCount - 1; i++) {
-            tasks[i] = tasks[i + 1];
-        }
-        tasks[taskCount - 1] = null;
-        taskCount--;
-        System.out.println("    Molo! Sweeping your mistakes under the rug? Removed from the board:");
+        Task removedTask = tasks.remove(taskIndex);
+        System.out.println("    Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:");
         System.out.println("      " + removedTask);
-        System.out.println("    Now you have " + taskCount + " tasks in the list.");
+        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -225,11 +219,10 @@ public class Nelson {
      * @param task the task to add
      */
     public void addTypedTask(Task task) {
-        tasks[taskCount] = task;
-        taskCount++;
+        tasks.add(task);
         System.out.println("    " + getAdditionMessage(task));
-        System.out.println("    " + task);
-        System.out.println("    Now you have " + taskCount + " tasks in the list.");
+        System.out.println("      " + task);
+        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -240,11 +233,11 @@ public class Nelson {
      */
     public String getAdditionMessage(Task task) {
         if (task instanceof Todo) {
-            return "Molo! Another thoughtless move? Fine. I have added this trivial ToDo:";
+            return "Molo! Another thoughtless move? Fine. I have added this trivial task:";
         }
         if (task instanceof Deadline) {
-            return "Molo! Running out of time on your clock? Pathetic. I have added this Deadline:";
+            return "Molo! Running out of time on your clock? Pathetic. I have added this task:";
         }
-        return "Molo! Booking out time just to blunder? Typical. I have added this Event:";
+        return "Molo! Booking out time just to blunder? Typical. I have added this task:";
     }
 }
