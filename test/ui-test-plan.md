@@ -107,17 +107,17 @@ System booting...
     Type your move, or are you just going to let your time run out?
     ____________________________________________________________
     ____________________________________________________________
-    A weak move. I have added this trivial task to your board:
+    Another thoughtless move? Fine. I have added this trivial ToDo:
     [T][ ] borrow book
     Now you have 1 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    A weak move. I have added this trivial task to your board:
+    Running out of time on your clock? Pathetic. I have added this Deadline:
     [D][ ] return book (by: Sunday)
     Now you have 2 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    A weak move. I have added this trivial task to your board:
+    Booking out time just to blunder? Typical. I have added this Event:
     [E][ ] project meeting (from: Mon 2pm to: 4pm)
     Now you have 3 tasks in the list.
     ____________________________________________________________

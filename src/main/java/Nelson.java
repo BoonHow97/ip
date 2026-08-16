@@ -79,24 +79,24 @@ public class Nelson {
             }
 
             if (command.startsWith("todo ")) {
-                addTypedTask(new Task('T', command.substring(5), "", "", ""));
+                addTypedTask(new Todo(command.substring(5)));
                 continue;
             }
 
             if (command.startsWith("deadline ")) {
                 String[] deadlineParts = command.substring(9).split(" /by ", 2);
-                addTypedTask(new Task('D', deadlineParts[0], deadlineParts[1], "", ""));
+                addTypedTask(new Deadline(deadlineParts[0], deadlineParts[1]));
                 continue;
             }
 
             if (command.startsWith("event ")) {
                 String[] eventParts = command.substring(6).split(" /from ", 2);
                 String[] eventTimes = eventParts[1].split(" /to ", 2);
-                addTypedTask(new Task('E', eventParts[0], "", eventTimes[0], eventTimes[1]));
+                addTypedTask(new Event(eventParts[0], eventTimes[0], eventTimes[1]));
                 continue;
             }
 
-            tasks[taskCount] = new Task(command);
+            tasks[taskCount] = new Todo(command);
             taskCount++;
 
             String addMessage = ADD_MESSAGES[moveCount % ADD_MESSAGES.length];
@@ -115,7 +115,7 @@ public class Nelson {
         System.out.println("    Evaluate your board state. Here are your tasks:");
         for (int index = 0; index < taskCount; index++) {
             Task task = tasks[index];
-            System.out.println("    " + (index + 1) + "." + task.getListDisplay());
+            System.out.println("    " + (index + 1) + "." + task);
         }
     }
 
@@ -156,9 +156,25 @@ public class Nelson {
     public void addTypedTask(Task task) {
         tasks[taskCount] = task;
         taskCount++;
-        System.out.println("    A weak move. I have added this trivial task to your board:");
-        System.out.println("    " + task.getListDisplay());
+        System.out.println("    " + getAdditionMessage(task));
+        System.out.println("    " + task);
         System.out.println("    Now you have " + taskCount + " tasks in the list.");
         System.out.println("    ____________________________________________________________");
+    }
+
+    /**
+     * Returns Nelson's type-specific response when adding a task.
+     *
+     * @param task the task being added
+     * @return the appropriate task-addition message
+     */
+    public String getAdditionMessage(Task task) {
+        if (task instanceof Todo) {
+            return "Another thoughtless move? Fine. I have added this trivial ToDo:";
+        }
+        if (task instanceof Deadline) {
+            return "Running out of time on your clock? Pathetic. I have added this Deadline:";
+        }
+        return "Booking out time just to blunder? Typical. I have added this Event:";
     }
 }
