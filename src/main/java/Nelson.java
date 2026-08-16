@@ -4,20 +4,21 @@ import java.util.Scanner;
  * Starts the Nelson chatbot application.
  */
 public class Nelson {
-    /** Chess-themed taunts appended to echoed commands. */
-    private static final String[] TAUNTS = {
-            "A pawn could have planned that better.",
-            "Was that a move, or did your knight just trip over itself?",
-            "Spectacular--your position is already collapsing.",
-            "Your king called; it wants a better defender.",
-            "Even your bishop looks embarrassed by that move.",
-            "I've seen stalemates put up more of a fight.",
-            "That command has all the strategy of hanging your queen on move one.",
-            "Bold choice. Unfortunately, it is the kind of bold that loses a rook."
-            
+    /** Chess-themed prefixes for task-addition responses. */
+    private static final String[] ADD_MESSAGES = {
+            "A weak opening, but",
+            "A developing move.",
+            "That blunder is now on the scoresheet.",
+            "A gambit so poor even your pawns are confused.",
+            "Another dubious move recorded for posterity."
     };
-    private static int moveCount = 0;
 
+    /** Stores the user's tasks for this run of the program. */
+    private final String[] tasks = new String[100];
+    /** Number of tasks currently stored in {@link #tasks}. */
+    private int taskCount = 0;
+    /** Selects the next task-addition response. */
+    private int moveCount = 0;
 
     public static void main(String[] args) {
         Nelson nelson = new Nelson();
@@ -39,7 +40,7 @@ public class Nelson {
         System.out.println("System booting...\n" + logo);
         System.out.println("    ____________________________________________________________");
         System.out.println("    Molo! I have a surprise for you. Your move!");
-        System.out.println("    Type your command, or are you just going to let your time run out?");
+        System.out.println("    Type your move, or are you just going to let your time run out?");
         System.out.println("    ____________________________________________________________");
     }
 
@@ -59,12 +60,31 @@ public class Nelson {
                 return;
             }
 
-            String taunt = TAUNTS[moveCount % TAUNTS.length];
-            System.out.println("    You played: " + command + ". " + taunt);
+            if (command.equals("list")) {
+                showTasks();
+                System.out.println("    ____________________________________________________________");
+                continue;
+            }
+
+            tasks[taskCount] = command;
+            taskCount++;
+
+            String addMessage = ADD_MESSAGES[moveCount % ADD_MESSAGES.length];
+            System.out.println("    " + addMessage + " I have added: " + command + ". Defend yourself.");
             System.out.println("    ____________________________________________________________");
-            
-            // Increment the move count so the next command gets the next taunt
+
+            // Increment the move count so the next task gets the next response.
             moveCount++;
+        }
+    }
+
+    /**
+     * Displays all tasks that have been added during this run.
+     */
+    public void showTasks() {
+        System.out.println("    Evaluate your board state. Here are your tasks:");
+        for (int index = 0; index < taskCount; index++) {
+            System.out.println("    " + (index + 1) + ". " + tasks[index]);
         }
     }
 }
