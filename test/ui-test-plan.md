@@ -75,8 +75,57 @@ System booting...
     ____________________________________________________________
     ____________________________________________________________
     Evaluate your board state. Here are your tasks:
-    1.[X] read book
-    2.[ ] return book
+    1.[T][X] read book
+    2.[T][ ] return book
+    ____________________________________________________________
+    ____________________________________________________________
+    Resigning already? Pathetic. I win.
+    ____________________________________________________________
+```
+
+## Test case: Add typed tasks
+**Aim:** Verify ToDo, Deadline, and Event parsing, confirmation, and list formatting.
+**Input:**
+```text
+todo borrow book
+deadline return book /by Sunday
+event project meeting /from Mon 2pm /to 4pm
+list
+bye
+```
+**Expected output:**
+```text
+System booting...
+       _   __     __
+       / | / /___ / /________  ____
+      /  |/ / __ \/ / ___/ __ \/ __ \
+     / /|  /  __/ / (__  ) /_/ / / / /
+    /_/ |_/\___/_/_/____/\____/_/ /_/
+
+    ____________________________________________________________
+    Molo! I have a surprise for you. Your move!
+    Type your move, or are you just going to let your time run out?
+    ____________________________________________________________
+    ____________________________________________________________
+    A weak move. I have added this trivial task to your board:
+    [T][ ] borrow book
+    Now you have 1 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    A weak move. I have added this trivial task to your board:
+    [D][ ] return book (by: Sunday)
+    Now you have 2 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    A weak move. I have added this trivial task to your board:
+    [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    Now you have 3 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Evaluate your board state. Here are your tasks:
+    1.[T][ ] borrow book
+    2.[D][ ] return book (by: Sunday)
+    3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
     ____________________________________________________________
     ____________________________________________________________
     Resigning already? Pathetic. I win.

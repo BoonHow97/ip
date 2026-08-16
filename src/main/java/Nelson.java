@@ -78,6 +78,24 @@ public class Nelson {
                 continue;
             }
 
+            if (command.startsWith("todo ")) {
+                addTypedTask(new Task('T', command.substring(5), "", "", ""));
+                continue;
+            }
+
+            if (command.startsWith("deadline ")) {
+                String[] deadlineParts = command.substring(9).split(" /by ", 2);
+                addTypedTask(new Task('D', deadlineParts[0], deadlineParts[1], "", ""));
+                continue;
+            }
+
+            if (command.startsWith("event ")) {
+                String[] eventParts = command.substring(6).split(" /from ", 2);
+                String[] eventTimes = eventParts[1].split(" /to ", 2);
+                addTypedTask(new Task('E', eventParts[0], "", eventTimes[0], eventTimes[1]));
+                continue;
+            }
+
             tasks[taskCount] = new Task(command);
             taskCount++;
 
@@ -97,8 +115,7 @@ public class Nelson {
         System.out.println("    Evaluate your board state. Here are your tasks:");
         for (int index = 0; index < taskCount; index++) {
             Task task = tasks[index];
-            System.out.println("    " + (index + 1) + ".[" + task.getStatusIcon() + "] "
-                    + task.getDescription());
+            System.out.println("    " + (index + 1) + "." + task.getListDisplay());
         }
     }
 
@@ -129,5 +146,19 @@ public class Nelson {
         System.out.println("    A blunder. Taking back your move? Pathetic. "
                 + "I have marked this as not done yet:");
         System.out.println("    [ ] " + task.getDescription());
+    }
+
+    /**
+     * Adds a typed task and displays Nelson's task-addition response.
+     *
+     * @param task the task to add
+     */
+    public void addTypedTask(Task task) {
+        tasks[taskCount] = task;
+        taskCount++;
+        System.out.println("    A weak move. I have added this trivial task to your board:");
+        System.out.println("    " + task.getListDisplay());
+        System.out.println("    Now you have " + taskCount + " tasks in the list.");
+        System.out.println("    ____________________________________________________________");
     }
 }
