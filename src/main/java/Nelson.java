@@ -15,6 +15,8 @@ public class Nelson {
 
     /** Stores the user's tasks for this run of the program. */
     private final String[] tasks = new String[100];
+    /** Tracks whether each corresponding task in {@link #tasks} is complete. */
+    private final boolean[] isDone = new boolean[100];
     /** Number of tasks currently stored in {@link #tasks}. */
     private int taskCount = 0;
     /** Selects the next task-addition response. */
@@ -66,6 +68,12 @@ public class Nelson {
                 continue;
             }
 
+            if (command.startsWith("mark ")) {
+                markTask(command);
+                System.out.println("    ____________________________________________________________");
+                continue;
+            }
+
             tasks[taskCount] = command;
             taskCount++;
 
@@ -84,7 +92,21 @@ public class Nelson {
     public void showTasks() {
         System.out.println("    Evaluate your board state. Here are your tasks:");
         for (int index = 0; index < taskCount; index++) {
-            System.out.println("    " + (index + 1) + ". " + tasks[index]);
+            String status = isDone[index] ? "[X]" : "[ ]";
+            System.out.println("    " + (index + 1) + "." + status + " " + tasks[index]);
         }
+    }
+
+    /**
+     * Marks the task specified in a mark command as complete.
+     *
+     * @param command the complete command entered by the user
+     */
+    public void markTask(String command) {
+        int taskNumber = Integer.parseInt(command.substring(5));
+        int taskIndex = taskNumber - 1;
+        isDone[taskIndex] = true;
+        System.out.println("    You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
+        System.out.println("    [X] " + tasks[taskIndex]);
     }
 }
