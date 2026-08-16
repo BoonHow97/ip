@@ -14,9 +14,7 @@ public class Nelson {
     };
 
     /** Stores the user's tasks for this run of the program. */
-    private final String[] tasks = new String[100];
-    /** Tracks whether each corresponding task in {@link #tasks} is complete. */
-    private final boolean[] isDone = new boolean[100];
+    private final Task[] tasks = new Task[100];
     /** Number of tasks currently stored in {@link #tasks}. */
     private int taskCount = 0;
     /** Selects the next task-addition response. */
@@ -80,7 +78,7 @@ public class Nelson {
                 continue;
             }
 
-            tasks[taskCount] = command;
+            tasks[taskCount] = new Task(command);
             taskCount++;
 
             String addMessage = ADD_MESSAGES[moveCount % ADD_MESSAGES.length];
@@ -98,8 +96,9 @@ public class Nelson {
     public void showTasks() {
         System.out.println("    Evaluate your board state. Here are your tasks:");
         for (int index = 0; index < taskCount; index++) {
-            String status = isDone[index] ? "[X]" : "[ ]";
-            System.out.println("    " + (index + 1) + "." + status + " " + tasks[index]);
+            Task task = tasks[index];
+            System.out.println("    " + (index + 1) + ".[" + task.getStatusIcon() + "] "
+                    + task.getDescription());
         }
     }
 
@@ -111,9 +110,10 @@ public class Nelson {
     public void markTask(String command) {
         int taskNumber = Integer.parseInt(command.substring(5));
         int taskIndex = taskNumber - 1;
-        isDone[taskIndex] = true;
+        Task task = tasks[taskIndex];
+        task.markAsDone();
         System.out.println("    You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
-        System.out.println("    [X] " + tasks[taskIndex]);
+        System.out.println("    [X] " + task.getDescription());
     }
 
     /**
@@ -124,9 +124,10 @@ public class Nelson {
     public void unmarkTask(String command) {
         int taskNumber = Integer.parseInt(command.substring(7));
         int taskIndex = taskNumber - 1;
-        isDone[taskIndex] = false;
+        Task task = tasks[taskIndex];
+        task.markAsNotDone();
         System.out.println("    A blunder. Taking back your move? Pathetic. "
                 + "I have marked this as not done yet:");
-        System.out.println("    [ ] " + tasks[taskIndex]);
+        System.out.println("    [ ] " + task.getDescription());
     }
 }
