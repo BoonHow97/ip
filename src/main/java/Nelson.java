@@ -1,5 +1,4 @@
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 /**
  * Starts the Nelson chatbot application.
@@ -7,6 +6,8 @@ import java.util.Scanner;
 public class Nelson {
     /** Handles loading and saving the task list. */
     private final Storage storage;
+    /** Handles console input and output. */
+    private final Ui ui = new Ui();
     /** Converts raw user input into executable commands. */
     private final Parser parser = new Parser();
     /** Stores the user's tasks for this run of the program. */
@@ -20,51 +21,30 @@ public class Nelson {
 
     public static void main(String[] args) {
         Nelson nelson = new Nelson();
-        nelson.showWelcome();
+        nelson.ui.showWelcome();
         nelson.handleCommands();
-    }
-
-    /**
-     * Displays the welcome message when the chatbot starts.
-     */
-    public void showWelcome() {
-        String logo =
-                "       _   __     __\n"
-                        + "       / | / /___ / /________  ____\n"
-                        + "      /  |/ / __ \\/ / ___/ __ \\/ __ \\\n"
-                        + "     / /|  /  __/ / (__  ) /_/ / / / /\n"
-                        + "    /_/ |_/\\___/_/_/____/\\____/_/ /_/\n";
-
-        System.out.println("System booting...\n" + logo);
-        System.out.println("    ____________________________________________________________");
-        System.out.println("    Molo! I have a surprise for you. Your move!");
-        System.out.println("    Type your move, or are you just going to let your time run out?");
-        System.out.println("    ____________________________________________________________");
     }
 
     /**
      * Reads and responds to commands until the user resigns.
      */
     public void handleCommands() {
-        Scanner scanner = new Scanner(System.in);
-
-        while (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
-            System.out.println("    ____________________________________________________________");
+        while (ui.hasNextCommand()) {
+            String command = ui.readCommand();
+            ui.showSeparator();
 
             try {
                 if (command.equals("bye") || command.equals("Bye")) {
-                    System.out.println("    Molo! Resigning already? Pathetic. I win.");
-                    System.out.println("    ____________________________________________________________");
+                    ui.showGoodbye();
                     return;
                 }
                 processCommand(command);
             } catch (NelsonException exception) {
-                System.out.println("    " + exception.getMessage());
+                ui.showError(exception.getMessage());
             } catch (NumberFormatException | IndexOutOfBoundsException exception) {
-                System.out.println("    Molo! Out of bounds! That task number doesn't exist on this board.");
+                ui.showError("Molo! Out of bounds! That task number doesn't exist on this board.");
             }
-            System.out.println("    ____________________________________________________________");
+            ui.showSeparator();
         }
     }
 
@@ -107,10 +87,10 @@ public class Nelson {
      * Displays all tasks that have been added during this run.
      */
     public void showTasks() {
-        System.out.println("    Molo! Evaluate your board state. Here are the tasks in your list:");
+        ui.show("Molo! Evaluate your board state. Here are the tasks in your list:");
         for (int index = 0; index < tasks.size(); index++) {
             Task task = tasks.get(index);
-            System.out.println("    " + (index + 1) + "." + task);
+            ui.show((index + 1) + "." + task);
         }
     }
 
@@ -133,8 +113,8 @@ public class Nelson {
         Task task = tasks.get(taskIndex);
         task.markAsDone();
         storage.save(tasks);
-        System.out.println("    Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
-        System.out.println("    [X] " + task.getDescription());
+        ui.show("Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
+        ui.show("[X] " + task.getDescription());
     }
 
     /**
@@ -156,8 +136,8 @@ public class Nelson {
         Task task = tasks.get(taskIndex);
         task.markAsNotDone();
         storage.save(tasks);
-        System.out.println("    Molo! Taking back your move? Absolute blunder. Marked as not done yet:");
-        System.out.println("    [ ] " + task.getDescription());
+        ui.show("Molo! Taking back your move? Absolute blunder. Marked as not done yet:");
+        ui.show("[ ] " + task.getDescription());
     }
 
     /**
@@ -178,9 +158,9 @@ public class Nelson {
         }
         Task removedTask = tasks.remove(taskIndex);
         storage.save(tasks);
-        System.out.println("    Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:");
-        System.out.println("      " + removedTask);
-        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+        ui.show("Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:");
+        ui.show("  " + removedTask);
+        ui.show("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -191,9 +171,9 @@ public class Nelson {
     public void addTypedTask(Task task) {
         tasks.add(task);
         storage.save(tasks);
-        System.out.println("    " + getAdditionMessage(task));
-        System.out.println("      " + task);
-        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+        ui.show(getAdditionMessage(task));
+        ui.show("  " + task);
+        ui.show("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
