@@ -1,12 +1,24 @@
 import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
  * Starts the Nelson chatbot application.
  */
 public class Nelson {
+    /** The relative path where Nelson stores the current task list. */
+    private static final Path TASK_FILE = Paths.get("data", "nelson.txt");
     /** Stores the user's tasks for this run of the program using an ArrayList. */
     private final ArrayList<Task> tasks = new ArrayList<>();
+
+    /** Creates Nelson and restores any tasks saved by an earlier run. */
+    public Nelson() {
+        loadTasks();
+    }
 
     public static void main(String[] args) {
         Nelson nelson = new Nelson();
@@ -165,6 +177,7 @@ public class Nelson {
         }
         Task task = tasks.get(taskIndex);
         task.markAsDone();
+        saveTasks();
         System.out.println("    Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
         System.out.println("    [X] " + task.getDescription());
     }
@@ -187,6 +200,7 @@ public class Nelson {
         }
         Task task = tasks.get(taskIndex);
         task.markAsNotDone();
+        saveTasks();
         System.out.println("    Molo! Taking back your move? Absolute blunder. Marked as not done yet:");
         System.out.println("    [ ] " + task.getDescription());
     }
@@ -208,6 +222,7 @@ public class Nelson {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
         Task removedTask = tasks.remove(taskIndex);
+        saveTasks();
         System.out.println("    Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:");
         System.out.println("      " + removedTask);
         System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
@@ -220,9 +235,73 @@ public class Nelson {
      */
     public void addTypedTask(Task task) {
         tasks.add(task);
+        saveTasks();
         System.out.println("    " + getAdditionMessage(task));
         System.out.println("      " + task);
         System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    /** Loads valid task records from disk, leaving the list empty when no file exists. */
+    private void loadTasks() {
+        try {
+            if (!Files.isRegularFile(TASK_FILE)) {
+                return;
+            }
+            for (String line : Files.readAllLines(TASK_FILE, StandardCharsets.UTF_8)) {
+                if (line.isBlank()) {
+                    continue;
+                }
+                String[] parts = line.split("\\s*\\|\\s*", -1);
+                if (parts.length < 3 || (!parts[1].equals("0") && !parts[1].equals("1"))) {
+                    continue;
+                }
+                Task task;
+                switch (parts[0]) {
+                case "T":
+                    if (parts.length != 3 || parts[2].isBlank()) {
+                        continue;
+                    }
+                    task = new Todo(parts[2]);
+                    break;
+                case "D":
+                    if (parts.length != 4 || parts[2].isBlank() || parts[3].isBlank()) {
+                        continue;
+                    }
+                    task = new Deadline(parts[2], parts[3]);
+                    break;
+                case "E":
+                    if (parts.length != 5 || parts[2].isBlank()
+                            || parts[3].isBlank() || parts[4].isBlank()) {
+                        continue;
+                    }
+                    task = new Event(parts[2], parts[3], parts[4]);
+                    break;
+                default:
+                    continue;
+                }
+                if (parts[1].equals("1")) {
+                    task.markAsDone();
+                }
+                tasks.add(task);
+            }
+        } catch (IOException | SecurityException exception) {
+            System.err.println("Warning: unable to load tasks from " + TASK_FILE + ". Starting with an empty list.");
+            tasks.clear();
+        }
+    }
+
+    /** Saves the current task list to disk after a successful mutation. */
+    private void saveTasks() {
+        try {
+            Files.createDirectories(TASK_FILE.getParent());
+            ArrayList<String> savedTasks = new ArrayList<>();
+            for (Task task : tasks) {
+                savedTasks.add(task.toStorageString());
+            }
+            Files.write(TASK_FILE, savedTasks, StandardCharsets.UTF_8);
+        } catch (IOException | SecurityException exception) {
+            System.err.println("Warning: unable to save tasks to " + TASK_FILE + ".");
+        }
     }
 
     /**

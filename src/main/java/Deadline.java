@@ -17,6 +17,16 @@ public class Deadline extends Task {
     }
 
     /**
+     * Returns this deadline in the format used for saving it to disk.
+     *
+     * @return the deadline type, status, description, and deadline separated by pipes
+     */
+    @Override
+    public String toStorageString() {
+        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by;
+    }
+
+    /**
      * Returns the deadline type, status, description, and deadline.
      *
      * @return the formatted deadline task
