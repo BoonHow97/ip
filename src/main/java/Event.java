@@ -1,23 +1,39 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Locale;
+
 /**
  * Represents a task that occurs between a start and end time.
  */
 public class Event extends Task {
-    /** The event start date or time. */
-    protected String from;
-    /** The event end date or time. */
-    protected String to;
+    /** The event start date. */
+    protected LocalDate from;
+    /** The event end date. */
+    protected LocalDate to;
+    /** The format used when displaying event dates to the user. */
+    private static final DateTimeFormatter DISPLAY_FORMAT =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
+    /** The format used when writing event dates to storage. */
+    private static final DateTimeFormatter STORAGE_FORMAT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * Creates an incomplete event task.
      *
      * @param description the text describing the task
-     * @param from the event start date or time
-     * @param to the event end date or time
+     * @param from the event start date in yyyy-mm-dd format
+     * @param to the event end date in yyyy-mm-dd format
+     * @throws NelsonException if either date is not in yyyy-mm-dd format
      */
-    public Event(String description, String from, String to) {
+    public Event(String description, String from, String to) throws NelsonException {
         super(description);
-        this.from = from;
-        this.to = to;
+        try {
+            this.from = LocalDate.parse(from);
+            this.to = LocalDate.parse(to);
+        } catch (DateTimeParseException exception) {
+            throw new NelsonException("Molo! Invalid date. Please use the yyyy-mm-dd format.");
+        }
     }
 
     /**
@@ -27,7 +43,8 @@ public class Event extends Task {
      */
     @Override
     public String toStorageString() {
-        return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + from + " | " + to;
+        return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
+                + from.format(STORAGE_FORMAT) + " | " + to.format(STORAGE_FORMAT);
     }
 
     /**
@@ -37,6 +54,7 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(DISPLAY_FORMAT)
+                + " to: " + to.format(DISPLAY_FORMAT) + ")";
     }
 }

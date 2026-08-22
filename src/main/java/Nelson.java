@@ -256,27 +256,14 @@ public class Nelson {
                     continue;
                 }
                 Task task;
-                switch (parts[0]) {
-                case "T":
-                    if (parts.length != 3 || parts[2].isBlank()) {
-                        continue;
-                    }
-                    task = new Todo(parts[2]);
-                    break;
-                case "D":
-                    if (parts.length != 4 || parts[2].isBlank() || parts[3].isBlank()) {
-                        continue;
-                    }
-                    task = new Deadline(parts[2], parts[3]);
-                    break;
-                case "E":
-                    if (parts.length != 5 || parts[2].isBlank()
-                            || parts[3].isBlank() || parts[4].isBlank()) {
-                        continue;
-                    }
-                    task = new Event(parts[2], parts[3], parts[4]);
-                    break;
-                default:
+                try {
+                    task = parseStoredTask(parts);
+                } catch (NelsonException exception) {
+                    System.out.println("Molo! I found a corrupted saved task and skipped it. "
+                            + "Saved dates must use the yyyy-MM-dd format.");
+                    continue;
+                }
+                if (task == null) {
                     continue;
                 }
                 if (parts[1].equals("1")) {
@@ -287,6 +274,22 @@ public class Nelson {
         } catch (IOException | SecurityException exception) {
             System.err.println("Warning: unable to load tasks from " + TASK_FILE + ". Starting with an empty list.");
             tasks.clear();
+        }
+    }
+
+    /** Builds a task from a validated storage record, or returns null for an unknown record. */
+    private Task parseStoredTask(String[] parts) throws NelsonException {
+        switch (parts[0]) {
+        case "T":
+            return parts.length == 3 && !parts[2].isBlank() ? new Todo(parts[2]) : null;
+        case "D":
+            return parts.length == 4 && !parts[2].isBlank() && !parts[3].isBlank()
+                    ? new Deadline(parts[2], parts[3]) : null;
+        case "E":
+            return parts.length == 5 && !parts[2].isBlank() && !parts[3].isBlank()
+                    && !parts[4].isBlank() ? new Event(parts[2], parts[3], parts[4]) : null;
+        default:
+            return null;
         }
     }
 
