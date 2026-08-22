@@ -13,8 +13,8 @@ Before starting Nelson, create `data/nelson.txt` with:
 
 ```text
 T | 1 | read book
-D | 0 | return book | Sunday
-E | 0 | project meeting | Mon 2pm | 4pm
+D | 0 | return book | 2026-06-06
+E | 0 | project meeting | 2026-08-06 | 2026-08-06
 ```
 
 Then enter `list` followed by `bye`. The list should contain the three tasks, with `read book` marked as completed.
@@ -25,6 +25,7 @@ Then enter `list` followed by `bye`. The list should contain the three tasks, wi
 - Start Nelson with no `data` folder or `data/nelson.txt`; it should start with an empty task list.
 - Add a task while the `data` folder is missing; Nelson should create the folder and file automatically.
 - Add blank, incomplete, unknown-type, and invalid-status lines to `data/nelson.txt`; Nelson should ignore those lines and load valid records.
+- Add a deadline or event with an old-style date such as `Sunday`; Nelson should skip that task and print a persona warning about the required `yyyy-MM-dd` format.
 
 ## Test case: Save tasks after mutations
 **Aim:** Verify that adding, marking, unmarking, and deleting tasks preserve the existing console behavior while saving after each change.
@@ -158,8 +159,9 @@ System booting...
 **Input:**
 ```text
 todo borrow book
-deadline return book /by Sunday
-event project meeting /from Mon 2pm /to 4pm
+deadline return book /by 2026-06-06
+deadline calculate elo /by 2026-08-25
+event project meeting /from 2026-08-06 /to 2026-08-06
 list
 bye
 ```
@@ -183,19 +185,25 @@ System booting...
     ____________________________________________________________
     ____________________________________________________________
     Molo! Running out of time on your clock? Pathetic. I have added this task:
-      [D][ ] return book (by: Sunday)
+      [D][ ] return book (by: Jun 6 2026)
     Now you have 2 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    Molo! Booking out time just to blunder? Typical. I have added this task:
-      [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    Molo! Running out of time on your clock? Pathetic. I have added this task:
+      [D][ ] calculate elo (by: Aug 25 2026)
     Now you have 3 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Booking out time just to blunder? Typical. I have added this task:
+      [E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
+    Now you have 4 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
     Molo! Evaluate your board state. Here are the tasks in your list:
     1.[T][ ] borrow book
-    2.[D][ ] return book (by: Sunday)
-    3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+    2.[D][ ] return book (by: Jun 6 2026)
+    3.[D][ ] calculate elo (by: Aug 25 2026)
+    4.[E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
     ____________________________________________________________
     ____________________________________________________________
     Molo! Resigning already? Pathetic. I win.
