@@ -1,4 +1,3 @@
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -8,6 +7,8 @@ import java.util.Scanner;
 public class Nelson {
     /** Handles loading and saving the task list. */
     private final Storage storage;
+    /** Converts raw user input into executable commands. */
+    private final Parser parser = new Parser();
     /** Stores the user's tasks for this run of the program. */
     private final TaskList tasks;
 
@@ -74,75 +75,32 @@ public class Nelson {
      * @throws NelsonException if the command or its arguments are invalid
      */
     public void processCommand(String command) throws NelsonException {
-        if (command.equals("list")) {
+        Parser.Command parsed = parser.parse(command);
+        switch (parsed.getType()) {
+        case LIST:
             showTasks();
-        } else if (command.equals("todo") || command.startsWith("todo ")) {
-            String description = command.substring(4).trim();
-            if (description.isEmpty()) {
-                throw new NelsonException("Molo! An empty move? You must provide a description, you amateur.");
-            }
-            addTypedTask(new Todo(description));
-        } else if (command.equals("deadline") || command.startsWith("deadline ")) {
-            addDeadline(command);
-        } else if (command.equals("event") || command.startsWith("event ")) {
-            addEvent(command);
-        } else if (command.equals("mark") || command.startsWith("mark ")) {
-            markTask(command);
-        } else if (command.equals("unmark") || command.startsWith("unmark ")) {
-            unmarkTask(command);
-        } else if (command.equals("delete") || command.startsWith("delete ")) {
-            deleteTask(command);
-        } else {
+            break;
+        case TODO:
+            addTypedTask(new Todo(parsed.getArgument(0)));
+            break;
+        case DEADLINE:
+            addTypedTask(new Deadline(parsed.getArgument(0), parsed.getArgument(1)));
+            break;
+        case EVENT:
+            addTypedTask(new Event(parsed.getArgument(0), parsed.getArgument(1), parsed.getArgument(2)));
+            break;
+        case MARK:
+            markTask(parsed.getArgument(0));
+            break;
+        case UNMARK:
+            unmarkTask(parsed.getArgument(0));
+            break;
+        case DELETE:
+            deleteTask(parsed.getArgument(0));
+            break;
+        default:
             throw new NelsonException("Molo! I don't know what that means. Are you even playing the same game?");
         }
-    }
-
-    /**
-     * Parses and adds a deadline task.
-     *
-     * @param command the deadline command string
-     * @throws NelsonException if description or /by parameter is missing/malformed
-     */
-    public void addDeadline(String command) throws NelsonException {
-        String details = command.substring(8).trim();
-        if (details.isEmpty()) {
-            throw new NelsonException("Molo! An empty move? You must provide a description, you amateur.");
-        }
-        int byIndex = details.indexOf("/by");
-        if (byIndex == -1) {
-            throw new NelsonException("Molo! Invalid notation! You are missing the required time parameters.");
-        }
-        String description = details.substring(0, byIndex).trim();
-        String by = details.substring(byIndex + 3).trim();
-        if (description.isEmpty() || by.isEmpty()) {
-            throw new NelsonException("Molo! Invalid notation! You are missing the required time parameters.");
-        }
-        addTypedTask(new Deadline(description, by));
-    }
-
-    /**
-     * Parses and adds an event task.
-     *
-     * @param command the event command string
-     * @throws NelsonException if description, /from, or /to parameters are missing/malformed
-     */
-    public void addEvent(String command) throws NelsonException {
-        String details = command.substring(5).trim();
-        if (details.isEmpty()) {
-            throw new NelsonException("Molo! An empty move? You must provide a description, you amateur.");
-        }
-        int fromIndex = details.indexOf("/from");
-        int toIndex = details.indexOf("/to");
-        if (fromIndex == -1 || toIndex == -1 || fromIndex > toIndex) {
-            throw new NelsonException("Molo! Invalid notation! You are missing the required time parameters.");
-        }
-        String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + 5, toIndex).trim();
-        String to = details.substring(toIndex + 3).trim();
-        if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
-            throw new NelsonException("Molo! Invalid notation! You are missing the required time parameters.");
-        }
-        addTypedTask(new Event(description, from, to));
     }
 
     /**
@@ -163,7 +121,7 @@ public class Nelson {
      * @throws NelsonException if index is invalid or out of bounds
      */
     public void markTask(String command) throws NelsonException {
-        String indexStr = command.substring(4).trim();
+        String indexStr = command.trim();
         if (indexStr.isEmpty()) {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
@@ -186,7 +144,7 @@ public class Nelson {
      * @throws NelsonException if index is invalid or out of bounds
      */
     public void unmarkTask(String command) throws NelsonException {
-        String indexStr = command.substring(6).trim();
+        String indexStr = command.trim();
         if (indexStr.isEmpty()) {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
@@ -209,7 +167,7 @@ public class Nelson {
      * @throws NelsonException if index is invalid or out of bounds
      */
     public void deleteTask(String command) throws NelsonException {
-        String indexStr = command.substring(6).trim();
+        String indexStr = command.trim();
         if (indexStr.isEmpty()) {
             throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
