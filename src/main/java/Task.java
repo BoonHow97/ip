@@ -35,6 +35,15 @@ public class Task {
         return description;
     }
 
+    /**
+     * Returns this task in the format used for saving it to disk.
+     *
+     * @return the task type, status, and description separated by pipes
+     */
+    public String toStorageString() {
+        return "T | " + (isDone ? "1" : "0") + " | " + description;
+    }
+
     /** Marks this task as complete. */
     public void markAsDone() {
         isDone = true;

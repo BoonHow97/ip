@@ -21,6 +21,16 @@ public class Event extends Task {
     }
 
     /**
+     * Returns this event in the format used for saving it to disk.
+     *
+     * @return the event type, status, description, start, and end separated by pipes
+     */
+    @Override
+    public String toStorageString() {
+        return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + from + " | " + to;
+    }
+
+    /**
      * Returns the event type, status, description, and time range.
      *
      * @return the formatted event task

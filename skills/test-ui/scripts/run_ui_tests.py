@@ -52,6 +52,8 @@ def main():
             return 2
         for match in matches:
             name, aim = match["name"], match["aim"]
+            # Each UI case is isolated; persistence is verified separately with a preloaded file.
+            (root / "data" / "nelson.txt").unlink(missing_ok=True)
             user_input = normalise(match["input"])
             expected = normalise(match["expected"])
             result = subprocess.run([executable("java"), "-cp", temporary, "Nelson"],

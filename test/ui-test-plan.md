@@ -6,6 +6,72 @@ Run:
 python skills/test-ui/scripts/run_ui_tests.py
 ```
 
+## Manual persistence check: Load tasks at startup
+**Aim:** Verify that Nelson restores saved tasks and completion status when it starts.
+
+Before starting Nelson, create `data/nelson.txt` with:
+
+```text
+T | 1 | read book
+D | 0 | return book | Sunday
+E | 0 | project meeting | Mon 2pm | 4pm
+```
+
+Then enter `list` followed by `bye`. The list should contain the three tasks, with `read book` marked as completed.
+
+## Manual persistence checks: Missing and malformed storage
+**Aim:** Verify that storage edge cases do not prevent Nelson from starting.
+
+- Start Nelson with no `data` folder or `data/nelson.txt`; it should start with an empty task list.
+- Add a task while the `data` folder is missing; Nelson should create the folder and file automatically.
+- Add blank, incomplete, unknown-type, and invalid-status lines to `data/nelson.txt`; Nelson should ignore those lines and load valid records.
+
+## Test case: Save tasks after mutations
+**Aim:** Verify that adding, marking, unmarking, and deleting tasks preserve the existing console behavior while saving after each change.
+**Input:**
+```text
+todo save this task
+mark 1
+unmark 1
+delete 1
+bye
+```
+**Expected output:**
+```text
+System booting...
+       _   __     __
+       / | / /___ / /________  ____
+      /  |/ / __ \/ / ___/ __ \/ __ \
+     / /|  /  __/ / (__  ) /_/ / / / /
+    /_/ |_/\___/_/_/____/\____/_/ /_/
+
+    ____________________________________________________________
+    Molo! I have a surprise for you. Your move!
+    Type your move, or are you just going to let your time run out?
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] save this task
+    Now you have 1 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.
+    [X] save this task
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Taking back your move? Absolute blunder. Marked as not done yet:
+    [ ] save this task
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:
+      [T][ ] save this task
+    Now you have 0 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Resigning already? Pathetic. I win.
+    ____________________________________________________________
+```
+
 ## Test case: Welcome and resignation
 **Aim:** Verify that Nelson greets the user and exits after bye.
 **Input:**
@@ -26,7 +92,7 @@ System booting...
     Type your move, or are you just going to let your time run out?
     ____________________________________________________________
     ____________________________________________________________
-    Resigning already? Pathetic. I win.
+    Molo! Resigning already? Pathetic. I win.
     ____________________________________________________________
 ```
 
@@ -34,8 +100,8 @@ System booting...
 **Aim:** Verify task status changes and numbered list formatting.
 **Input:**
 ```text
-read book
-return book
+todo read book
+todo return book
 mark 1
 mark 2
 unmark 2
@@ -56,30 +122,34 @@ System booting...
     Type your move, or are you just going to let your time run out?
     ____________________________________________________________
     ____________________________________________________________
-    A weak opening, but I have added: read book. Defend yourself.
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] read book
+    Now you have 1 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    A developing move. I have added: return book. Defend yourself.
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] return book
+    Now you have 2 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    You completed a task? Do not celebrate. I am already calculating 15 moves ahead.
+    Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.
     [X] read book
     ____________________________________________________________
     ____________________________________________________________
-    You completed a task? Do not celebrate. I am already calculating 15 moves ahead.
+    Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.
     [X] return book
     ____________________________________________________________
     ____________________________________________________________
-    A blunder. Taking back your move? Pathetic. I have marked this as not done yet:
+    Molo! Taking back your move? Absolute blunder. Marked as not done yet:
     [ ] return book
     ____________________________________________________________
     ____________________________________________________________
-    Evaluate your board state. Here are your tasks:
+    Molo! Evaluate your board state. Here are the tasks in your list:
     1.[T][X] read book
     2.[T][ ] return book
     ____________________________________________________________
     ____________________________________________________________
-    Resigning already? Pathetic. I win.
+    Molo! Resigning already? Pathetic. I win.
     ____________________________________________________________
 ```
 
@@ -107,27 +177,27 @@ System booting...
     Type your move, or are you just going to let your time run out?
     ____________________________________________________________
     ____________________________________________________________
-    Another thoughtless move? Fine. I have added this trivial ToDo:
-    [T][ ] borrow book
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] borrow book
     Now you have 1 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    Running out of time on your clock? Pathetic. I have added this Deadline:
-    [D][ ] return book (by: Sunday)
+    Molo! Running out of time on your clock? Pathetic. I have added this task:
+      [D][ ] return book (by: Sunday)
     Now you have 2 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    Booking out time just to blunder? Typical. I have added this Event:
-    [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    Molo! Booking out time just to blunder? Typical. I have added this task:
+      [E][ ] project meeting (from: Mon 2pm to: 4pm)
     Now you have 3 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
-    Evaluate your board state. Here are your tasks:
+    Molo! Evaluate your board state. Here are the tasks in your list:
     1.[T][ ] borrow book
     2.[D][ ] return book (by: Sunday)
     3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
     ____________________________________________________________
     ____________________________________________________________
-    Resigning already? Pathetic. I win.
+    Molo! Resigning already? Pathetic. I win.
     ____________________________________________________________
 ```
