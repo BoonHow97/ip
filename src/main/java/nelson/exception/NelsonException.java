@@ -1,3 +1,5 @@
+package nelson.exception;
+
 /**
  * Represents an invalid command or command argument entered into Nelson.
  */

@@ -56,7 +56,7 @@ def main():
             (root / "data" / "nelson.txt").unlink(missing_ok=True)
             user_input = normalise(match["input"])
             expected = normalise(match["expected"])
-            result = subprocess.run([executable("java"), "-cp", temporary, "Nelson"],
+            result = subprocess.run([executable("java"), "-cp", temporary, "nelson.Nelson"],
                                     cwd=root, input=user_input + "\n", text=True, capture_output=True)
             actual = normalise(result.stdout)
             print(f"\n=== {name} ===\nAim: {aim}\n--- Console input ---\n{user_input}")

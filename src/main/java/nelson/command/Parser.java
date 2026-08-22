@@ -1,3 +1,7 @@
+package nelson.command;
+
+import nelson.exception.NelsonException;
+
 /** Converts raw user input into structured Nelson commands. */
 public class Parser {
     /** Supported command kinds. */

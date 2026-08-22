@@ -1,3 +1,5 @@
+package nelson.ui;
+
 import java.util.Scanner;
 
 /** Handles Nelson's console input and output. */
