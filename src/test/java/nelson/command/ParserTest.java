@@ -69,6 +69,19 @@ public class ParserTest {
     }
 
     @Test
+    public void parseFindCommand_returnsKeyword() throws NelsonException {
+        Parser.Command command = parser.parse("find book");
+
+        assertEquals(Parser.Type.FIND, command.getType());
+        assertEquals("book", ((FindCommand) command).getKeyword());
+    }
+
+    @Test
+    public void parseFindWithoutKeyword_throwsNelsonException() {
+        assertThrows(NelsonException.class, () -> parser.parse("find"));
+    }
+
+    @Test
     public void parseEmptyTodo_throwsNelsonException() {
         NelsonException exception = assertThrows(NelsonException.class, () -> parser.parse("todo"));
 

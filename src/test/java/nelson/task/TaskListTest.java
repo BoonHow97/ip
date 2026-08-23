@@ -92,4 +92,27 @@ public class TaskListTest {
 
         assertThrows(IndexOutOfBoundsException.class, () -> taskList.remove(1));
     }
+
+    @Test
+    public void findMatchingKeyword_returnsCaseInsensitiveMatchesInOrder() {
+        TaskList taskList = new TaskList();
+        Task first = new Todo("Read a book");
+        Task second = new Todo("Attend class");
+        Task third = new Todo("Return the BOOK");
+        taskList.add(first);
+        taskList.add(second);
+        taskList.add(third);
+
+        List<Task> matches = taskList.find("book");
+
+        assertIterableEquals(List.of(first, third), matches);
+    }
+
+    @Test
+    public void findNoMatchingKeyword_returnsEmptyList() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("Read a book"));
+
+        assertEquals(List.of(), taskList.find("meeting"));
+    }
 }
