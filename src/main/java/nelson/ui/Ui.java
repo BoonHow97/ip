@@ -1,6 +1,9 @@
 package nelson.ui;
 
+import java.util.List;
 import java.util.Scanner;
+
+import nelson.task.Task;
 
 /** Handles Nelson's console input and output. */
 public class Ui {
@@ -63,5 +66,17 @@ public class Ui {
      */
     public void showError(String message) {
         show(message);
+    }
+
+    /**
+     * Displays matching tasks with one-based list numbering.
+     *
+     * @param tasks tasks matching the user's search keyword.
+     */
+    public void showMatchingTasks(List<Task> tasks) {
+        show("Here are the matching tasks in your list:");
+        for (int index = 0; index < tasks.size(); index++) {
+            show((index + 1) + "." + tasks.get(index));
+        }
     }
 }

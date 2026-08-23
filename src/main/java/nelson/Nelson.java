@@ -1,6 +1,7 @@
 package nelson;
 
 import nelson.command.Parser;
+import nelson.command.FindCommand;
 import nelson.exception.NelsonException;
 import nelson.storage.Storage;
 import nelson.task.Deadline;
@@ -93,6 +94,10 @@ public class Nelson {
             break;
         case DELETE:
             deleteTask(parsed.getArgument(0));
+            break;
+        case FIND:
+            FindCommand findCommand = (FindCommand) parsed;
+            ui.showMatchingTasks(tasks.find(findCommand.getKeyword()));
             break;
         default:
             throw new NelsonException("Molo! I don't know what that means. Are you even playing the same game?");

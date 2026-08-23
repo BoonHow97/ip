@@ -6,6 +6,54 @@ Run:
 python skills/test-ui/scripts/run_ui_tests.py
 ```
 
+## Test case: Find matching tasks
+**Aim:** Verify that `find` displays matching task descriptions in list order.
+**Input:**
+```text
+todo read book
+deadline return book /by 2026-06-06
+todo attend class
+find book
+bye
+```
+**Expected output:**
+```text
+System booting...
+       _   __     __
+       / | / /___ / /________  ____
+      /  |/ / __ \/ / ___/ __ \/ __ \
+     / /|  /  __/ / (__  ) /_/ / / / /
+    /_/ |_/\___/_/_/____/\____/_/ /_/
+
+    ____________________________________________________________
+    Molo! I have a surprise for you. Your move!
+    Type your move, or are you just going to let your time run out?
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] read book
+    Now you have 1 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Running out of time on your clock? Pathetic. I have added this task:
+      [D][ ] return book (by: Jun 6 2026)
+    Now you have 2 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] attend class
+    Now you have 3 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Here are the matching tasks in your list:
+    1.[T][ ] read book
+    2.[D][ ] return book (by: Jun 6 2026)
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Resigning already? Pathetic. I win.
+    ____________________________________________________________
+```
+
 ## Manual persistence check: Load tasks at startup
 **Aim:** Verify that Nelson restores saved tasks and completion status when it starts.
 

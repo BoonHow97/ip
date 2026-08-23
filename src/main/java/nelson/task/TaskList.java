@@ -2,6 +2,8 @@ package nelson.task;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Stores Nelson's tasks and provides operations on the task collection.
@@ -66,9 +68,29 @@ public class TaskList implements Iterable<Task> {
     }
 
     /**
+<<<<<<< HEAD
      * Allows storage code to iterate over tasks without owning the collection.
      * @return an iterator over the tasks in insertion order
      */
+=======
+     * Returns tasks whose descriptions contain the keyword, ignoring case.
+     *
+     * @param keyword text to search for.
+     * @return matching tasks in their original list order.
+     */
+    public List<Task> find(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        ArrayList<Task> matches = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                matches.add(task);
+            }
+        }
+        return matches;
+    }
+
+    /** Allows storage code to iterate over tasks without owning the collection. */
+>>>>>>> branch-Level-9
     @Override
     public Iterator<Task> iterator() {
         return tasks.iterator();

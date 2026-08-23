@@ -6,13 +6,22 @@ import nelson.exception.NelsonException;
 public class Parser {
     /** Supported command kinds. */
     public enum Type {
+       
         LIST,
+       
         TODO,
+       
         DEADLINE,
+       
         EVENT,
+       
         MARK,
+       
         UNMARK,
-        DELETE
+       
+        DELETE,
+        FIND
+   
     }
 
     /** A parsed command and its arguments. */
@@ -20,7 +29,6 @@ public class Parser {
         private final Type type;
         private final String[] arguments;
 
-        /** Creates a parsed command with its extracted arguments. */
         private Command(Type type, String... arguments) {
             this.type = type;
             this.arguments = arguments;
@@ -69,8 +77,40 @@ public class Parser {
             return new Command(Type.UNMARK, command.substring(6).trim());
         } else if (command.equals("delete") || command.startsWith("delete ")) {
             return new Command(Type.DELETE, command.substring(6).trim());
+        } else if (command.equals("find") || command.startsWith("find ")) {
+            return parseFind(command);
         }
         throw new NelsonException("Molo! I don't know what that means. Are you even playing the same game?");
+    }
+
+    /**
+     * Returns a find command containing the requested keyword.
+     *
+     * @param command raw find command.
+     * @return parsed find command.
+     * @throws NelsonException if the keyword is missing.
+     */
+    private FindCommand parseFind(String command) throws NelsonException {
+        String keyword = command.substring(4).trim();
+        if (keyword.isEmpty()) {
+            throw new NelsonException("Molo! An empty search? You must provide a keyword, you amateur.");
+        }
+        return new FindCommand(keyword);
+    }
+
+    /**
+     * Returns a find command containing the requested keyword.
+     *
+     * @param command raw find command.
+     * @return parsed find command.
+     * @throws NelsonException if the keyword is missing.
+     */
+    private FindCommand parseFind(String command) throws NelsonException {
+        String keyword = command.substring(4).trim();
+        if (keyword.isEmpty()) {
+            throw new NelsonException("Molo! An empty search? You must provide a keyword, you amateur.");
+        }
+        return new FindCommand(keyword);
     }
 
     /** Parses a deadline command into its description and date arguments. */
