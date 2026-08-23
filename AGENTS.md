@@ -24,6 +24,13 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Project-specific requirements
 
+## Java coding standard
+
+All Java production and test code must follow `skills/seedu-java-coding-standard/SKILL.md`,
+which is based on the SE-EDU Java basic and intermediate coding standard. Apply it when
+creating, modifying, or reviewing Java code, including package naming, imports, layout,
+braces, line length, naming, and JavaDoc.
+
 ## Java version:
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
@@ -37,6 +44,12 @@ After every code update:
 3. Do not continue after a UI-test failure. Report the failing test case together with its expected and actual output.
 
 ## Git
+
+All future branch names and commits must follow
+`skills/seedu-git-standard/SKILL.md`, based on the SE-EDU Git conventions.
+Commit subjects must be imperative, capitalized, period-free, and no longer
+than 72 characters. Non-trivial commits must include a concise body wrapped at
+72 characters that explains what changed and why.
 
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.

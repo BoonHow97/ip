@@ -5,7 +5,15 @@ import nelson.exception.NelsonException;
 /** Converts raw user input into structured Nelson commands. */
 public class Parser {
     /** Supported command kinds. */
-    public enum Type { LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE }
+    public enum Type {
+        LIST,
+        TODO,
+        DEADLINE,
+        EVENT,
+        MARK,
+        UNMARK,
+        DELETE
+    }
 
     /** A parsed command and its arguments. */
     public static class Command {
@@ -22,14 +30,18 @@ public class Parser {
          * Returns the command type.
          * @return the parsed command type
          */
-        public Type getType() { return type; }
+        public Type getType() {
+            return type;
+        }
 
         /**
          * Returns an extracted command argument.
          * @param index zero-based argument index
          * @return the argument at {@code index}
          */
-        public String getArgument(int index) { return arguments[index]; }
+        public String getArgument(int index) {
+            return arguments[index];
+        }
     }
 
     /**
