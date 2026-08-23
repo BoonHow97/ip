@@ -12,16 +12,32 @@ public class Parser {
         private final Type type;
         private final String[] arguments;
 
+        /** Creates a parsed command with its extracted arguments. */
         private Command(Type type, String... arguments) {
             this.type = type;
             this.arguments = arguments;
         }
 
+        /**
+         * Returns the command type.
+         * @return the parsed command type
+         */
         public Type getType() { return type; }
+
+        /**
+         * Returns an extracted command argument.
+         * @param index zero-based argument index
+         * @return the argument at {@code index}
+         */
         public String getArgument(int index) { return arguments[index]; }
     }
 
-    /** Parses one user command and validates its required notation. */
+    /**
+     * Parses one user command and validates its required notation.
+     * @param command raw command entered by the user
+     * @return the structured command
+     * @throws NelsonException if the command or its arguments are invalid
+     */
     public Command parse(String command) throws NelsonException {
         if (command.equals("list")) {
             return new Command(Type.LIST);
@@ -45,6 +61,7 @@ public class Parser {
         throw new NelsonException("Molo! I don't know what that means. Are you even playing the same game?");
     }
 
+    /** Parses a deadline command into its description and date arguments. */
     private Command parseDeadline(String command) throws NelsonException {
         String details = command.substring(8).trim();
         int byIndex = details.indexOf("/by");
@@ -62,6 +79,7 @@ public class Parser {
         return new Command(Type.DEADLINE, description, by);
     }
 
+    /** Parses an event command into its description and date arguments. */
     private Command parseEvent(String command) throws NelsonException {
         String details = command.substring(5).trim();
         int fromIndex = details.indexOf("/from");
@@ -81,10 +99,12 @@ public class Parser {
         return new Command(Type.EVENT, description, from, to);
     }
 
+    /** Creates the standard error for a command without a description. */
     private NelsonException emptyMove() {
         return new NelsonException("Molo! An empty move? You must provide a description, you amateur.");
     }
 
+    /** Creates the standard error for missing deadline or event parameters. */
     private NelsonException invalidTimeParameters() {
         return new NelsonException("Molo! Invalid notation! You are missing the required time parameters.");
     }

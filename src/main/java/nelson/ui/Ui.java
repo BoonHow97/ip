@@ -22,12 +22,18 @@ public class Ui {
         showSeparator();
     }
 
-    /** Returns whether another command is available. */
+    /**
+     * Returns whether another command is available.
+     * @return {@code true} when another input line exists
+     */
     public boolean hasNextCommand() {
         return scanner.hasNextLine();
     }
 
-    /** Reads the next command. */
+    /**
+     * Reads the next command.
+     * @return the next input line
+     */
     public String readCommand() {
         return scanner.nextLine();
     }
@@ -43,12 +49,18 @@ public class Ui {
         showSeparator();
     }
 
-    /** Displays a normal response line. */
+    /**
+     * Displays a normal response line.
+     * @param message response text without the standard indentation
+     */
     public void show(String message) {
         System.out.println("    " + message);
     }
 
-    /** Displays an error response. */
+    /**
+     * Displays an error response.
+     * @param message error text without the standard indentation
+     */
     public void showError(String message) {
         show(message);
     }

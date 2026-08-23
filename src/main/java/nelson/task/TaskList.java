@@ -15,7 +15,10 @@ public class TaskList implements Iterable<Task> {
         tasks = new ArrayList<>();
     }
 
-    /** Creates a task list containing the tasks from the given source. */
+    /**
+     * Creates a task list containing the tasks from the given source.
+     * @param source tasks to copy into this list
+     */
     public TaskList(Iterable<Task> source) {
         this();
         for (Task task : source) {
@@ -23,22 +26,36 @@ public class TaskList implements Iterable<Task> {
         }
     }
 
-    /** Adds a task to the end of this list. */
+    /**
+     * Adds a task to the end of this list.
+     * @param task task to add
+     */
     public void add(Task task) {
         tasks.add(task);
     }
 
-    /** Removes and returns the task at the given zero-based index. */
+    /**
+     * Removes and returns the task at the given zero-based index.
+     * @param index zero-based index of the task to remove
+     * @return the removed task
+     */
     public Task remove(int index) {
         return tasks.remove(index);
     }
 
-    /** Returns the task at the given zero-based index. */
+    /**
+     * Returns the task at the given zero-based index.
+     * @param index zero-based index of the requested task
+     * @return the task at {@code index}
+     */
     public Task get(int index) {
         return tasks.get(index);
     }
 
-    /** Returns the number of tasks in this list. */
+    /**
+     * Returns the number of tasks in this list.
+     * @return the task count
+     */
     public int size() {
         return tasks.size();
     }
@@ -48,7 +65,10 @@ public class TaskList implements Iterable<Task> {
         tasks.clear();
     }
 
-    /** Allows storage code to iterate over tasks without owning the collection. */
+    /**
+     * Allows storage code to iterate over tasks without owning the collection.
+     * @return an iterator over the tasks in insertion order
+     */
     @Override
     public Iterator<Task> iterator() {
         return tasks.iterator();

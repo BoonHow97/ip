@@ -18,12 +18,18 @@ public class Storage {
     /** The relative or absolute path supplied for the storage file. */
     private final Path taskFile;
 
-    /** Creates storage backed by the supplied OS-independent path. */
+    /**
+     * Creates storage backed by the supplied OS-independent path.
+     * @param taskFile path of the task data file
+     */
     public Storage(Path taskFile) {
         this.taskFile = taskFile;
     }
 
-    /** Loads valid tasks, returning an empty list when storage is unavailable. */
+    /**
+     * Loads valid tasks, returning an empty list when storage is unavailable.
+     * @return the tasks restored from the storage file
+     */
     public TaskList load() {
         ArrayList<Task> loadedTasks = new ArrayList<>();
         try {
@@ -61,7 +67,10 @@ public class Storage {
         return new TaskList(loadedTasks);
     }
 
-    /** Saves the current task list, creating its parent folder when necessary. */
+    /**
+     * Saves the current task list, creating its parent folder when necessary.
+     * @param tasks tasks to write to the storage file
+     */
     public void save(TaskList tasks) {
         try {
             if (taskFile.getParent() != null) {
@@ -77,7 +86,12 @@ public class Storage {
         }
     }
 
-    /** Builds one task from a validated storage record. */
+    /**
+     * Builds one task from a validated storage record.
+     * @param parts fields from one pipe-delimited storage record
+     * @return the reconstructed task, or {@code null} for an unknown record
+     * @throws NelsonException if a saved date cannot be parsed
+     */
     private Task parseStoredTask(String[] parts) throws NelsonException {
         switch (parts[0]) {
         case "T":

@@ -31,6 +31,10 @@ public class Nelson {
         tasks = storage.load();
     }
 
+    /**
+     * Starts the chatbot application.
+     * @param args command-line arguments, which are currently unused
+     */
     public static void main(String[] args) {
         Nelson nelson = new Nelson();
         nelson.ui.showWelcome();
