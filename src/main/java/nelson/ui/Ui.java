@@ -53,11 +53,14 @@ public class Ui {
     }
 
     /**
-     * Displays a normal response line.
-     * @param message response text without the standard indentation
+     * Displays one or more normal response lines.
+     *
+     * @param messages response text without the standard indentation
      */
-    public void show(String message) {
-        System.out.println("    " + message);
+    public void show(String... messages) {
+        for (String message : messages) {
+            System.out.println("    " + message);
+        }
     }
 
     /**

@@ -22,11 +22,13 @@ public class GuiUi extends Ui {
     /**
      * Sends a normal response line to the GUI.
      *
-     * @param message response text without console indentation
+     * @param messages response text without console indentation
      */
     @Override
-    public void show(String message) {
-        output.accept(message);
+    public void show(String... messages) {
+        for (String message : messages) {
+            output.accept(message);
+        }
     }
 
     /**

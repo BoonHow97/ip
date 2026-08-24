@@ -144,8 +144,8 @@ public class Nelson {
         Task task = tasks.get(taskIndex);
         task.markAsDone();
         storage.save(tasks);
-        ui.show("Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.");
-        ui.show("[X] " + task.getDescription());
+        ui.show("Molo! You completed a task? Do not celebrate. I am already calculating 15 moves ahead.",
+                "[X] " + task.getDescription());
     }
 
     /**
@@ -167,8 +167,8 @@ public class Nelson {
         Task task = tasks.get(taskIndex);
         task.markAsNotDone();
         storage.save(tasks);
-        ui.show("Molo! Taking back your move? Absolute blunder. Marked as not done yet:");
-        ui.show("[ ] " + task.getDescription());
+        ui.show("Molo! Taking back your move? Absolute blunder. Marked as not done yet:",
+                "[ ] " + task.getDescription());
     }
 
     /**
@@ -189,9 +189,9 @@ public class Nelson {
         }
         Task removedTask = tasks.remove(taskIndex);
         storage.save(tasks);
-        ui.show("Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:");
-        ui.show("  " + removedTask);
-        ui.show("Now you have " + tasks.size() + " tasks in the list.");
+        ui.show("Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:",
+                "  " + removedTask,
+                "Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -202,9 +202,9 @@ public class Nelson {
     public void addTypedTask(Task task) {
         tasks.add(task);
         storage.save(tasks);
-        ui.show(getAdditionMessage(task));
-        ui.show("  " + task);
-        ui.show("Now you have " + tasks.size() + " tasks in the list.");
+        ui.show(getAdditionMessage(task),
+                "  " + task,
+                "Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
