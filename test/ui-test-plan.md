@@ -1,5 +1,12 @@
 # Nelson UI Test Plan
 
+The JavaFX interface is launched with `gradlew run` (or by running
+`nelson.Launcher`). The console cases below remain the regression suite for
+the shared chatbot behavior and persistence layer.
+
+The JavaFX interface displays each user and Nelson message as a separate chat
+bubble with a distinct avatar inside a scrollable conversation pane.
+
 Run:
 
 ```powershell

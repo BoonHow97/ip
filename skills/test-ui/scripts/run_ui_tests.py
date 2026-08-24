@@ -43,7 +43,9 @@ def main():
     if version.returncode or (not args.allow_non_25 and not version.stdout.startswith("javac 25")):
         print(f"UI test runner error: Java 25 is required; found {version.stdout.strip()}.", file=sys.stderr)
         return 2
-    sources = sorted((root / "src" / "main" / "java").rglob("*.java"))
+    java_root = root / "src" / "main" / "java"
+    sources = sorted(source for source in java_root.rglob("*.java")
+                     if source.name not in {"NelsonGui.java", "Launcher.java", "DialogBox.java"})
     with tempfile.TemporaryDirectory(prefix="nelson-ui-tests-") as temporary:
         compiled = subprocess.run([javac, "-d", temporary, *(str(source) for source in sources)],
                                   cwd=root, text=True, capture_output=True)

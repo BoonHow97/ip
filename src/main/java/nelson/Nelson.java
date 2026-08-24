@@ -19,8 +19,8 @@ import nelson.ui.Ui;
 public class Nelson {
     /** Handles loading and saving the task list. */
     private final Storage storage;
-    /** Handles console input and output. */
-    private final Ui ui = new Ui();
+    /** Handles input and output for the selected user interface. */
+    private final Ui ui;
     /** Converts raw user input into executable commands. */
     private final Parser parser = new Parser();
     /** Stores the user's tasks for this run of the program. */
@@ -28,8 +28,18 @@ public class Nelson {
 
     /** Creates Nelson and restores any tasks saved by an earlier run. */
     public Nelson() {
+        this(new Ui());
+    }
+
+    /**
+     * Creates Nelson with the supplied user interface.
+     *
+     * @param ui user interface that receives Nelson's responses
+     */
+    public Nelson(Ui ui) {
         storage = new Storage(Paths.get("data", "nelson.txt"));
         tasks = storage.load();
+        this.ui = ui;
     }
 
     /**

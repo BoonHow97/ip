@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'com.gradleup.shadow' version '9.5.1'
     id 'checkstyle'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 java {
@@ -22,15 +23,20 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.4'
 }
 
+javafx {
+    version = '21.0.6'
+    modules = [ 'javafx.controls' ]
+}
+
 application {
-    mainClass = 'nelson.Nelson'
+    mainClass = 'nelson.Launcher'
 }
 
 shadowJar {
     archiveFileName = 'nelson-all.jar'
 
     manifest {
-        attributes 'Main-Class': 'nelson.Nelson'
+        attributes 'Main-Class': 'nelson.Launcher'
     }
 }
 
