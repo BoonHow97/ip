@@ -23,6 +23,7 @@ public class Storage {
      * @param taskFile path of the task data file
      */
     public Storage(Path taskFile) {
+        assert taskFile != null : "Storage path must not be null";
         this.taskFile = taskFile;
     }
 

@@ -30,6 +30,8 @@ public class Parser {
         private final String[] arguments;
 
         protected Command(Type type, String... arguments) {
+            assert type != null : "Command type must not be null";
+            assert arguments != null : "Command arguments must not be null";
             this.type = type;
             this.arguments = arguments;
         }

@@ -23,6 +23,7 @@ public class TaskList implements Iterable<Task> {
      */
     public TaskList(Iterable<Task> source) {
         this();
+        assert source != null : "Task source must not be null";
         for (Task task : source) {
             add(task);
         }
@@ -33,6 +34,7 @@ public class TaskList implements Iterable<Task> {
      * @param task task to add
      */
     public void add(Task task) {
+        assert task != null : "Task list must not contain null tasks";
         tasks.add(task);
     }
 
