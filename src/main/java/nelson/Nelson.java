@@ -132,15 +132,7 @@ public class Nelson {
      * @throws NelsonException if index is invalid or out of bounds
      */
     public void markTask(String command) throws NelsonException {
-        String indexStr = command.trim();
-        if (indexStr.isEmpty()) {
-            throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
-        }
-        int taskNumber = Integer.parseInt(indexStr);
-        int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
-        }
+        int taskIndex = parseTaskIndex(command);
         Task task = tasks.get(taskIndex);
         task.markAsDone();
         storage.save(tasks);
@@ -155,15 +147,7 @@ public class Nelson {
      * @throws NelsonException if index is invalid or out of bounds
      */
     public void unmarkTask(String command) throws NelsonException {
-        String indexStr = command.trim();
-        if (indexStr.isEmpty()) {
-            throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
-        }
-        int taskNumber = Integer.parseInt(indexStr);
-        int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
-        }
+        int taskIndex = parseTaskIndex(command);
         Task task = tasks.get(taskIndex);
         task.markAsNotDone();
         storage.save(tasks);
@@ -178,20 +162,36 @@ public class Nelson {
      * @throws NelsonException if index is invalid or out of bounds
      */
     public void deleteTask(String command) throws NelsonException {
-        String indexStr = command.trim();
-        if (indexStr.isEmpty()) {
-            throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
-        }
-        int taskNumber = Integer.parseInt(indexStr);
-        int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
-        }
+        int taskIndex = parseTaskIndex(command);
         Task removedTask = tasks.remove(taskIndex);
         storage.save(tasks);
         ui.show("Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:",
                 "  " + removedTask,
                 "Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    /**
+     * Converts a one-based task number into a validated zero-based index.
+     *
+     * @param taskNumberText task number supplied by the user
+     * @return the corresponding zero-based task index
+     * @throws NelsonException if the number is missing or outside the task list
+     */
+    private int parseTaskIndex(String taskNumberText) throws NelsonException {
+        String trimmedTaskNumber = taskNumberText.trim();
+        if (trimmedTaskNumber.isEmpty()) {
+            throw invalidTaskNumber();
+        }
+        int taskIndex = Integer.parseInt(trimmedTaskNumber) - 1;
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
+            throw invalidTaskNumber();
+        }
+        return taskIndex;
+    }
+
+    /** Creates the standard error for a missing or out-of-range task number. */
+    private NelsonException invalidTaskNumber() {
+        return new NelsonException("Molo! Out of bounds! That task number doesn't exist on this board.");
     }
 
     /**
