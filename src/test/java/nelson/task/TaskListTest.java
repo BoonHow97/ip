@@ -106,6 +106,8 @@ public class TaskListTest {
         List<Task> matches = taskList.find("book");
 
         assertIterableEquals(List.of(first, third), matches);
+        matches.remove(first);
+        assertIterableEquals(List.of(first, second, third), taskList);
     }
 
     @Test

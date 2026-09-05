@@ -182,7 +182,12 @@ public class Nelson {
         if (trimmedTaskNumber.isEmpty()) {
             throw invalidTaskNumber();
         }
-        int taskIndex = Integer.parseInt(trimmedTaskNumber) - 1;
+        int taskIndex;
+        try {
+            taskIndex = Integer.parseInt(trimmedTaskNumber) - 1;
+        } catch (NumberFormatException exception) {
+            throw invalidTaskNumber();
+        }
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
             throw invalidTaskNumber();
         }
