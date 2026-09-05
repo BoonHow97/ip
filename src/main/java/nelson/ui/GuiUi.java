@@ -1,9 +1,6 @@
 package nelson.ui;
 
-import java.util.List;
 import java.util.function.Consumer;
-
-import nelson.task.Task;
 
 /** Sends Nelson's responses to a JavaFX-friendly output callback. */
 public class GuiUi extends Ui {
@@ -41,16 +38,4 @@ public class GuiUi extends Ui {
         output.accept(message);
     }
 
-    /**
-     * Sends matching tasks to the GUI using the same numbering as the console.
-     *
-     * @param tasks tasks matching the search keyword
-     */
-    @Override
-    public void showMatchingTasks(List<Task> tasks) {
-        show("Here are the matching tasks in your list:");
-        for (int index = 0; index < tasks.size(); index++) {
-            show((index + 1) + "." + tasks.get(index));
-        }
-    }
 }
