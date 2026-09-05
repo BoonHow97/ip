@@ -105,6 +105,9 @@ public class Nelson {
             case DELETE:
                 deleteTask(parsed.getArgument(0));
                 break;
+            case SORT:
+                sortTasks();
+                break;
             case FIND:
                 FindCommand findCommand = (FindCommand) parsed;
                 ui.showMatchingTasks(tasks.find(findCommand.getKeyword()));
@@ -168,6 +171,14 @@ public class Nelson {
         ui.show("Molo! Sweeping your mistakes under the rug already? Fine, I've banished this blunder:",
                 "  " + removedTask,
                 "Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    /** Sorts tasks alphabetically, persists the order, and displays the result. */
+    public void sortTasks() {
+        tasks.sortByDescription();
+        storage.save(tasks);
+        ui.show("Molo! I have arranged your tasks alphabetically. Even you should find them now.");
+        showTasks();
     }
 
     /**

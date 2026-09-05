@@ -70,6 +70,18 @@ public class ParserTest {
     }
 
     @Test
+    public void parseSortCommand_returnsSortCommand() throws NelsonException {
+        Parser.Command command = parser.parse("sort");
+
+        assertEquals(Parser.Type.SORT, command.getType());
+    }
+
+    @Test
+    public void parseSortWithArguments_throwsNelsonException() {
+        assertThrows(NelsonException.class, () -> parser.parse("sort date"));
+    }
+
+    @Test
     public void parseFindCommand_returnsKeyword() throws NelsonException {
         Parser.Command command = parser.parse("find book");
 

@@ -56,7 +56,7 @@ public class NelsonGui extends Application {
                 + "todo <description>\n"
                 + "deadline <description> /by yyyy-mm-dd\n"
                 + "event <description> /from yyyy-mm-dd /to yyyy-mm-dd\n"
-                + "list   mark <number>   unmark <number>\n"
+                + "list   sort   mark <number>   unmark <number>\n"
                 + "delete <number>   find <keyword>   bye");
         help.setStyle("-fx-font-family: 'Consolas'; -fx-font-size: 12px;");
 

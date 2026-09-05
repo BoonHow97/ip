@@ -82,6 +82,56 @@ Then enter `list` followed by `bye`. The list should contain the three tasks, wi
 - Add blank, incomplete, unknown-type, and invalid-status lines to `data/nelson.txt`; Nelson should ignore those lines and load valid records.
 - Add a deadline or event with an old-style date such as `Sunday`; Nelson should skip that task and print a persona warning about the required `yyyy-MM-dd` format.
 
+## Test case: Sort tasks alphabetically
+**Aim:** Verify that `sort` orders every task type by description, ignoring letter case, and displays the new order.
+**Input:**
+```text
+todo write report
+deadline Attend lecture /by 2026-09-10
+event buy book /from 2026-09-08 /to 2026-09-08
+sort
+bye
+```
+**Expected output:**
+```text
+System booting...
+       _   __     __
+       / | / /___ / /________  ____
+      /  |/ / __ \/ / ___/ __ \/ __ \
+     / /|  /  __/ / (__  ) /_/ / / / /
+    /_/ |_/\___/_/_/____/\____/_/ /_/
+
+    ____________________________________________________________
+    Molo! I have a surprise for you. Your move!
+    Type your move, or are you just going to let your time run out?
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] write report
+    Now you have 1 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Running out of time on your clock? Pathetic. I have added this task:
+      [D][ ] Attend lecture (by: Sep 10 2026)
+    Now you have 2 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Booking out time just to blunder? Typical. I have added this task:
+      [E][ ] buy book (from: Sep 8 2026 to: Sep 8 2026)
+    Now you have 3 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! I have arranged your tasks alphabetically. Even you should find them now.
+    Molo! Evaluate your board state. Here are the tasks in your list:
+    1.[D][ ] Attend lecture (by: Sep 10 2026)
+    2.[E][ ] buy book (from: Sep 8 2026 to: Sep 8 2026)
+    3.[T][ ] write report
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Resigning already? Pathetic. I win.
+    ____________________________________________________________
+```
+
 ## Test case: Save tasks after mutations
 **Aim:** Verify that adding, marking, unmarking, and deleting tasks preserve the existing console behavior while saving after each change.
 **Input:**

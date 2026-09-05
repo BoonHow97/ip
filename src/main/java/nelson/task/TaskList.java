@@ -1,6 +1,7 @@
 package nelson.task;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -63,6 +64,11 @@ public class TaskList implements Iterable<Task> {
      */
     public int size() {
         return tasks.size();
+    }
+
+    /** Sorts tasks alphabetically by description, ignoring letter case. */
+    public void sortByDescription() {
+        tasks.sort(Comparator.comparing(Task::getDescription, String.CASE_INSENSITIVE_ORDER));
     }
 
     /** Removes all tasks from this list. */
