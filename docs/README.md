@@ -1,30 +1,61 @@
 # Nelson User Guide
 
-// Update the title above to match the actual product name
+Nelson is a chess-themed task assistant that stores ToDos, deadlines, and events. It remembers your tasks between
+runs and provides both a command-line interface and a JavaFX graphical interface.
 
-// Product screenshot goes here
+## Quick start
 
-// Product intro goes here
+1. Ensure Java 25 is installed.
+2. Run `java -jar nelson-all.jar` from the folder containing the JAR file.
+3. Enter one command at a time using the formats below.
 
-## Adding deadlines
+Dates must use the `yyyy-MM-dd` format, such as `2026-09-10`.
 
-// Describe the action and its outcome.
+## Adding tasks
 
-// Give examples of usage
+- `todo DESCRIPTION` adds a task without a date.
+- `deadline DESCRIPTION /by DATE` adds a task due on a date.
+- `event DESCRIPTION /from START_DATE /to END_DATE` adds an event spanning two dates.
 
-Example: `keyword (optional arguments)`
+Examples:
 
-// A description of the expected outcome goes here
-
+```text
+todo read book
+deadline submit report /by 2026-09-10
+event project meeting /from 2026-09-08 /to 2026-09-08
 ```
-expected output
+
+## Viewing and searching
+
+- `list` displays every task.
+- `find KEYWORD` displays tasks whose descriptions contain the keyword. Matching ignores letter case.
+
+Example: `find book`
+
+## Sorting tasks
+
+Use `sort` to arrange all tasks alphabetically by description. Sorting ignores letter case, keeps tasks with equal
+descriptions in their previous order, displays the new order, and saves it for the next run.
+
+Example:
+
+```text
+sort
 ```
 
-## Feature ABC
+## Updating task status
 
-// Feature details
+- `mark NUMBER` marks the numbered task as done.
+- `unmark NUMBER` marks the numbered task as not done.
 
+Task numbers are shown by `list`, `find`, and `sort`.
 
-## Feature XYZ
+## Deleting tasks
 
-// Feature details
+Use `delete NUMBER` to remove the numbered task from the list.
+
+Example: `delete 2`
+
+## Exiting
+
+Use `bye` to close Nelson. Task changes are saved automatically as they are made.

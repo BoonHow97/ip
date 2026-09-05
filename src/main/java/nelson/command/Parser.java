@@ -20,6 +20,9 @@ public class Parser {
         UNMARK,
 
         DELETE,
+
+        SORT,
+
         FIND
 
     }
@@ -63,6 +66,8 @@ public class Parser {
     public Command parse(String command) throws NelsonException {
         if (command.equals("list")) {
             return new Command(Type.LIST);
+        } else if (command.equals("sort")) {
+            return new Command(Type.SORT);
         } else if (command.equals("todo") || command.startsWith("todo ")) {
             String description = command.substring(4).trim();
             if (description.isEmpty()) {

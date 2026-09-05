@@ -117,4 +117,30 @@ public class TaskListTest {
 
         assertEquals(List.of(), taskList.find("meeting"));
     }
+
+    @Test
+    public void sortByDescription_mixedCase_ordersTasksIgnoringCase() {
+        TaskList taskList = new TaskList();
+        Task first = new Todo("write report");
+        Task second = new Todo("Attend lecture");
+        Task third = new Todo("buy book");
+        taskList.add(first);
+        taskList.add(second);
+        taskList.add(third);
+
+        taskList.sortByDescription();
+
+        assertIterableEquals(List.of(second, third, first), taskList);
+    }
+
+    @Test
+    public void sortByDescription_sameIgnoringCase_preservesInsertionOrder() {
+        Task first = new Todo("Read book");
+        Task second = new Todo("read BOOK");
+        TaskList taskList = new TaskList(List.of(first, second));
+
+        taskList.sortByDescription();
+
+        assertIterableEquals(List.of(first, second), taskList);
+    }
 }
