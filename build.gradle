@@ -44,6 +44,10 @@ tasks.named('build') {
     dependsOn tasks.named('shadowJar')
 }
 
+test {
+    useJUnitPlatform()
+}
+
 run {
     standardInput = System.in
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Stores Nelson's tasks and provides operations on the task collection.
@@ -79,7 +80,7 @@ public class TaskList implements Iterable<Task> {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         return tasks.stream()
                 .filter(task -> task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /** Allows storage code to iterate over tasks without owning the collection. */

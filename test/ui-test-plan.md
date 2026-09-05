@@ -209,6 +209,45 @@ System booting...
     ____________________________________________________________
 ```
 
+## Test case: Reject non-numeric task numbers
+**Aim:** Verify that an invalid task number produces Nelson's normal error response without ending the command loop.
+**Input:**
+```text
+todo defend the king
+mark abc
+list
+bye
+```
+**Expected output:**
+```text
+System booting...
+       _   __     __
+       / | / /___ / /________  ____
+      /  |/ / __ \/ / ___/ __ \/ __ \
+     / /|  /  __/ / (__  ) /_/ / / / /
+    /_/ |_/\___/_/_/____/\____/_/ /_/
+
+    ____________________________________________________________
+    Molo! I have a surprise for you. Your move!
+    Type your move, or are you just going to let your time run out?
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Another thoughtless move? Fine. I have added this trivial task:
+      [T][ ] defend the king
+    Now you have 1 tasks in the list.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Out of bounds! That task number doesn't exist on this board.
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Evaluate your board state. Here are the tasks in your list:
+    1.[T][ ] defend the king
+    ____________________________________________________________
+    ____________________________________________________________
+    Molo! Resigning already? Pathetic. I win.
+    ____________________________________________________________
+```
+
 ## Test case: Add typed tasks
 **Aim:** Verify ToDo, Deadline, and Event parsing, confirmation, and list formatting.
 **Input:**
