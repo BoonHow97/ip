@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 
 /** A chat bubble containing one message and its speaker's avatar. */
 public class DialogBox extends HBox {
+    private static final int AVATAR_SIZE = 32;
+
     /** The text displayed inside this message bubble. */
     private final Label text;
     /** The profile picture displayed beside the message. */
@@ -26,17 +28,19 @@ public class DialogBox extends HBox {
     private DialogBox(String message, Image avatar) {
         text = new Label(message);
         text.setWrapText(true);
-        text.setMaxWidth(560);
+        text.setMaxWidth(520);
         text.setPadding(new Insets(10, 14, 10, 14));
+        text.getStyleClass().add("message-bubble");
 
         displayPicture = new ImageView(avatar);
-        displayPicture.setFitWidth(42);
-        displayPicture.setFitHeight(42);
+        displayPicture.setFitWidth(AVATAR_SIZE);
+        displayPicture.setFitHeight(AVATAR_SIZE);
         displayPicture.setPreserveRatio(true);
 
         setAlignment(Pos.TOP_LEFT);
         setSpacing(10);
         setMaxWidth(Double.MAX_VALUE);
+        getStyleClass().add("dialog-box");
         getChildren().addAll(displayPicture, text);
     }
 
@@ -47,9 +51,8 @@ public class DialogBox extends HBox {
      * @return a styled Nelson dialog box
      */
     public static DialogBox forNelson(String message) {
-        DialogBox dialog = new DialogBox(message, createAvatar(Color.DARKORANGE));
-        dialog.text.setStyle("-fx-background-color: white; -fx-background-radius: 14px;"
-                + " -fx-font-size: 14px; -fx-font-family: monospace;");
+        DialogBox dialog = new DialogBox(message, createAvatar(Color.web("#c99700")));
+        dialog.text.getStyleClass().add("nelson-bubble");
         return dialog;
     }
 
@@ -60,12 +63,23 @@ public class DialogBox extends HBox {
      * @return a styled user dialog box
      */
     public static DialogBox forUser(String message) {
-        DialogBox dialog = new DialogBox(message, createAvatar(Color.DODGERBLUE));
+        DialogBox dialog = new DialogBox(message, createAvatar(Color.web("#315b7d")));
         dialog.setAlignment(Pos.TOP_RIGHT);
         dialog.getChildren().clear();
         dialog.getChildren().addAll(dialog.text, dialog.displayPicture);
-        dialog.text.setStyle("-fx-background-color: #d9ecff; -fx-background-radius: 14px;"
-                + " -fx-font-size: 14px;");
+        dialog.text.getStyleClass().add("user-bubble");
+        return dialog;
+    }
+
+    /**
+     * Creates a left-aligned error bubble that draws attention to invalid moves.
+     *
+     * @param message error message from Nelson
+     * @return a styled error dialog box
+     */
+    public static DialogBox forError(String message) {
+        DialogBox dialog = new DialogBox(message, createAvatar(Color.web("#a83232")));
+        dialog.text.getStyleClass().add("error-bubble");
         return dialog;
     }
 

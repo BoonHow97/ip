@@ -5,7 +5,10 @@ The JavaFX interface is launched with `gradlew run` (or by running
 the shared chatbot behavior and persistence layer.
 
 The JavaFX interface displays each user and Nelson message as a separate chat
-bubble with a distinct avatar inside a scrollable conversation pane.
+bubble with a distinct avatar inside a scrollable conversation pane. Invalid
+commands appear in a red error bubble, while normal Nelson and user messages
+use distinct chess-themed colors. The layout remains usable when the window is
+resized down to its documented minimum size.
 
 Run:
 
