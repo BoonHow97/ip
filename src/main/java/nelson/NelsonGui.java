@@ -37,20 +37,21 @@ public class NelsonGui extends Application {
      */
     @Override
     public void start(Stage stage) {
-        nelson = new Nelson(new GuiUi(this::appendBotMessage));
+        nelson = new Nelson(new GuiUi(this::appendBotMessage, this::appendErrorMessage));
 
         messages.setPadding(new Insets(14));
         messages.setFillWidth(true);
+        messages.getStyleClass().add("message-list");
         conversationPane.setContent(messages);
         conversationPane.setFitToWidth(true);
         conversationPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        conversationPane.setStyle("-fx-background: #f4f6f8; -fx-background-color: #f4f6f8;");
+        conversationPane.getStyleClass().add("conversation-pane");
         messages.heightProperty().addListener((observable, oldHeight, newHeight) -> scrollToLatestMessage());
 
         Label title = new Label("Nelson");
-        title.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
+        title.getStyleClass().add("app-title");
         Label subtitle = new Label("Your chess-themed task assistant");
-        subtitle.setStyle("-fx-text-fill: #555555;");
+        subtitle.getStyleClass().add("app-subtitle");
 
         Label help = new Label("Commands\n"
                 + "todo <description>\n"
@@ -58,18 +59,23 @@ public class NelsonGui extends Application {
                 + "event <description> /from yyyy-mm-dd /to yyyy-mm-dd\n"
                 + "list   sort   mark <number>   unmark <number>\n"
                 + "delete <number>   find <keyword>   bye");
-        help.setStyle("-fx-font-family: 'Consolas'; -fx-font-size: 12px;");
+        help.getStyleClass().add("command-help");
 
         HBox commandBar = new HBox(8, commandField, sendButton);
+        commandBar.getStyleClass().add("command-bar");
         HBox.setHgrow(commandField, Priority.ALWAYS);
         commandField.setPromptText("Type a command, for example: todo read book");
         commandField.setOnAction(event -> sendCommand());
         sendButton.setOnAction(event -> sendCommand());
 
         VBox header = new VBox(3, title, subtitle);
-        VBox rightPanel = new VBox(12, new Label("Quick reference"), help);
+        header.getStyleClass().add("app-header");
+        Label referenceTitle = new Label("Quick reference");
+        referenceTitle.getStyleClass().add("reference-title");
+        VBox rightPanel = new VBox(12, referenceTitle, help);
+        rightPanel.getStyleClass().add("reference-panel");
         rightPanel.setPadding(new Insets(0, 0, 0, 12));
-        rightPanel.setPrefWidth(290);
+        rightPanel.setPrefWidth(280);
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(18));
@@ -82,7 +88,10 @@ public class NelsonGui extends Application {
 
         appendWelcomeMessage();
         Scene scene = new Scene(root, 920, 620);
+        scene.getStylesheets().add(getClass().getResource("/nelson/style.css").toExternalForm());
         stage.setTitle("Nelson - Task Assistant");
+        stage.setMinWidth(720);
+        stage.setMinHeight(480);
         stage.setScene(scene);
         stage.show();
         commandField.requestFocus();
@@ -107,15 +116,21 @@ public class NelsonGui extends Application {
         try {
             nelson.processCommand(command);
         } catch (NelsonException exception) {
-            appendBotMessage(exception.getMessage());
+            appendErrorMessage(exception.getMessage());
         } catch (NumberFormatException | IndexOutOfBoundsException exception) {
-            appendBotMessage("Molo! Out of bounds! That task number doesn't exist on this board.");
+            appendErrorMessage("Molo! Out of bounds! That task number doesn't exist on this board.");
         }
     }
 
     /** Adds a response line to the conversation transcript. */
     private void appendBotMessage(String message) {
         messages.getChildren().add(DialogBox.forNelson(message));
+        scrollToLatestMessage();
+    }
+
+    /** Adds an attention-grabbing error response to the conversation transcript. */
+    private void appendErrorMessage(String message) {
+        messages.getChildren().add(DialogBox.forError(message));
         scrollToLatestMessage();
     }
 
