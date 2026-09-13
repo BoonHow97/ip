@@ -38,6 +38,9 @@ public class Event extends Task {
         } catch (DateTimeParseException exception) {
             throw new NelsonException("Molo! Invalid date. Please use the yyyy-mm-dd format.");
         }
+        if (!this.from.isBefore(this.to)) {
+            throw new NelsonException("Molo! Invalid event range. The start date must be before the end date.");
+        }
     }
 
     /**

@@ -10,6 +10,9 @@ commands appear in a red error bubble, while normal Nelson and user messages
 use distinct chess-themed colors. The layout remains usable when the window is
 resized down to its documented minimum size.
 
+Nelson ignores leading and trailing spaces around commands. Event start dates
+must be earlier than their end dates; equal or reversed ranges are rejected.
+
 Run:
 
 ```powershell
@@ -72,7 +75,7 @@ Before starting Nelson, create `data/nelson.txt` with:
 ```text
 T | 1 | read book
 D | 0 | return book | 2026-06-06
-E | 0 | project meeting | 2026-08-06 | 2026-08-06
+E | 0 | project meeting | 2026-08-06 | 2026-08-07
 ```
 
 Then enter `list` followed by `bye`. The list should contain the three tasks, with `read book` marked as completed.
@@ -91,7 +94,7 @@ Then enter `list` followed by `bye`. The list should contain the three tasks, wi
 ```text
 todo write report
 deadline Attend lecture /by 2026-09-10
-event buy book /from 2026-09-08 /to 2026-09-08
+event buy book /from 2026-09-08 /to 2026-09-09
 sort
 bye
 ```
@@ -120,14 +123,14 @@ System booting...
     ____________________________________________________________
     ____________________________________________________________
     Molo! Booking out time just to blunder? Typical. I have added this task:
-      [E][ ] buy book (from: Sep 8 2026 to: Sep 8 2026)
+      [E][ ] buy book (from: Sep 8 2026 to: Sep 9 2026)
     Now you have 3 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
     Molo! I have arranged your tasks alphabetically. Even you should find them now.
     Molo! Evaluate your board state. Here are the tasks in your list:
     1.[D][ ] Attend lecture (by: Sep 10 2026)
-    2.[E][ ] buy book (from: Sep 8 2026 to: Sep 8 2026)
+    2.[E][ ] buy book (from: Sep 8 2026 to: Sep 9 2026)
     3.[T][ ] write report
     ____________________________________________________________
     ____________________________________________________________
@@ -308,7 +311,7 @@ System booting...
 todo borrow book
 deadline return book /by 2026-06-06
 deadline calculate elo /by 2026-08-25
-event project meeting /from 2026-08-06 /to 2026-08-06
+event project meeting /from 2026-08-06 /to 2026-08-07
 list
 bye
 ```
@@ -342,7 +345,7 @@ System booting...
     ____________________________________________________________
     ____________________________________________________________
     Molo! Booking out time just to blunder? Typical. I have added this task:
-      [E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
+      [E][ ] project meeting (from: Aug 6 2026 to: Aug 7 2026)
     Now you have 4 tasks in the list.
     ____________________________________________________________
     ____________________________________________________________
@@ -350,7 +353,7 @@ System booting...
     1.[T][ ] borrow book
     2.[D][ ] return book (by: Jun 6 2026)
     3.[D][ ] calculate elo (by: Aug 25 2026)
-    4.[E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
+    4.[E][ ] project meeting (from: Aug 6 2026 to: Aug 7 2026)
     ____________________________________________________________
     ____________________________________________________________
     Molo! Resigning already? Pathetic. I win.

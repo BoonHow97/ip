@@ -64,28 +64,29 @@ public class Parser {
      * @throws NelsonException if the command or its arguments are invalid
      */
     public Command parse(String command) throws NelsonException {
-        if (command.equals("list")) {
+        String normalizedCommand = command.trim();
+        if (normalizedCommand.equals("list")) {
             return new Command(Type.LIST);
-        } else if (command.equals("sort")) {
+        } else if (normalizedCommand.equals("sort")) {
             return new Command(Type.SORT);
-        } else if (command.equals("todo") || command.startsWith("todo ")) {
-            String description = command.substring(4).trim();
+        } else if (normalizedCommand.equals("todo") || normalizedCommand.startsWith("todo ")) {
+            String description = normalizedCommand.substring(4).trim();
             if (description.isEmpty()) {
                 throw emptyMove();
             }
             return new Command(Type.TODO, description);
-        } else if (command.equals("deadline") || command.startsWith("deadline ")) {
-            return parseDeadline(command);
-        } else if (command.equals("event") || command.startsWith("event ")) {
-            return parseEvent(command);
-        } else if (command.equals("mark") || command.startsWith("mark ")) {
-            return new Command(Type.MARK, command.substring(4).trim());
-        } else if (command.equals("unmark") || command.startsWith("unmark ")) {
-            return new Command(Type.UNMARK, command.substring(6).trim());
-        } else if (command.equals("delete") || command.startsWith("delete ")) {
-            return new Command(Type.DELETE, command.substring(6).trim());
-        } else if (command.equals("find") || command.startsWith("find ")) {
-            return parseFind(command);
+        } else if (normalizedCommand.equals("deadline") || normalizedCommand.startsWith("deadline ")) {
+            return parseDeadline(normalizedCommand);
+        } else if (normalizedCommand.equals("event") || normalizedCommand.startsWith("event ")) {
+            return parseEvent(normalizedCommand);
+        } else if (normalizedCommand.equals("mark") || normalizedCommand.startsWith("mark ")) {
+            return new Command(Type.MARK, normalizedCommand.substring(4).trim());
+        } else if (normalizedCommand.equals("unmark") || normalizedCommand.startsWith("unmark ")) {
+            return new Command(Type.UNMARK, normalizedCommand.substring(6).trim());
+        } else if (normalizedCommand.equals("delete") || normalizedCommand.startsWith("delete ")) {
+            return new Command(Type.DELETE, normalizedCommand.substring(6).trim());
+        } else if (normalizedCommand.equals("find") || normalizedCommand.startsWith("find ")) {
+            return parseFind(normalizedCommand);
         }
         throw new NelsonException("Molo! I don't know what that means. Are you even playing the same game?");
     }
@@ -112,7 +113,7 @@ public class Parser {
         if (details.isEmpty()) {
             throw emptyMove();
         }
-        if (byIndex == -1) {
+        if (byIndex == -1 || byIndex != details.lastIndexOf("/by")) {
             throw invalidTimeParameters();
         }
         String description = details.substring(0, byIndex).trim();
@@ -131,7 +132,9 @@ public class Parser {
         if (details.isEmpty()) {
             throw emptyMove();
         }
-        if (fromIndex == -1 || toIndex == -1 || fromIndex > toIndex) {
+        boolean hasDuplicateParameter = fromIndex != details.lastIndexOf("/from")
+                || toIndex != details.lastIndexOf("/to");
+        if (fromIndex == -1 || toIndex == -1 || fromIndex > toIndex || hasDuplicateParameter) {
             throw invalidTimeParameters();
         }
         String description = details.substring(0, fromIndex).trim();
