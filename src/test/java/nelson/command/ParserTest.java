@@ -27,6 +27,14 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_commandWithOuterSpaces_ignoresOuterSpaces() throws NelsonException {
+        Parser.Command command = parser.parse("   todo study openings   ");
+
+        assertEquals(Parser.Type.TODO, command.getType());
+        assertEquals("study openings", command.getArgument(0));
+    }
+
+    @Test
     public void parseDeadlineCommand_returnsDescriptionAndDate() throws NelsonException {
         Parser.Command command = parser.parse("deadline submit report /by 2026-08-25");
 
@@ -110,9 +118,22 @@ public class ParserTest {
     }
 
     @Test
+    public void parseDeadline_duplicateByParameter_throwsNelsonException() {
+        assertThrows(
+                NelsonException.class, () -> parser.parse("deadline report /by 2026-09-18 /by 2026-09-19"));
+    }
+
+    @Test
     public void parseEventWithoutTimeParameters_throwsNelsonException() {
         assertThrows(
             NelsonException.class, () -> parser.parse("event team meeting"));
+    }
+
+    @Test
+    public void parseEvent_duplicateToParameter_throwsNelsonException() {
+        String command = "event match /from 2026-09-18 /to 2026-09-19 /to 2026-09-20";
+
+        assertThrows(NelsonException.class, () -> parser.parse(command));
     }
 
     @Test

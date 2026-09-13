@@ -41,4 +41,16 @@ public class EventTest {
     public void constructor_invalidDate_throwsNelsonException() {
         assertThrows(NelsonException.class, () -> new Event("team meeting", "06-08-2026", "2026-08-07"));
     }
+
+    /** Verifies that an event cannot end on its start date. */
+    @Test
+    public void constructor_sameStartAndEndDate_throwsNelsonException() {
+        assertThrows(NelsonException.class, () -> new Event("team meeting", "2026-08-06", "2026-08-06"));
+    }
+
+    /** Verifies that an event cannot end before its start date. */
+    @Test
+    public void constructor_endBeforeStart_throwsNelsonException() {
+        assertThrows(NelsonException.class, () -> new Event("team meeting", "2026-08-07", "2026-08-06"));
+    }
 }
