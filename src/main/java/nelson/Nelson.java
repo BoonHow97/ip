@@ -37,7 +37,17 @@ public class Nelson {
      * @param ui user interface that receives Nelson's responses
      */
     public Nelson(Ui ui) {
-        storage = new Storage(Paths.get("data", "nelson.txt"));
+        this(ui, new Storage(Paths.get("data", "nelson.txt")));
+    }
+
+    /**
+     * Creates Nelson with explicit collaborators for isolated testing.
+     *
+     * @param ui user interface that receives Nelson's responses
+     * @param storage storage location used to load and save tasks
+     */
+    Nelson(Ui ui, Storage storage) {
+        this.storage = storage;
         tasks = storage.load();
         this.ui = ui;
     }
